@@ -38,11 +38,11 @@ def logout(request):
     return redirect('home')
 @login_required(login_url='login1')   
 def adminprofile(request):
-    if not request.user.is_staff:
-        return redirect('/')
+    
+    u=Details.objects.all
     
     
-    return render(request,'admin_profile.html')
+    return render(request,'admin_profile.html',{'usrkey':u})
 def signup(request):
     return render(request,'signup.html') 
 def signupdb(request):
@@ -82,6 +82,49 @@ def signupdb(request):
 def userprofile(request):
     # if not request.user.is_staff:
     #     return redirect('/')
+    ucuser=request.user.id
+    use=Details.objects.get(userc_id=ucuser)
+   
+    return render(request,'user_profile.html',{'usrkey':use})
+def editpage(request):
     
+    customer=Details.objects.get(userc=request.user)
+    context={'usrkey': customer}
+    return render(request,'accountedit.html',context)
+
+
+def editdetails(request,pk):
     
-    return render(request,'user_profile.html')
+    if request.method=='POST':
+        
+        customer=Details.objects.get(id=pk)
+        user_id=customer.userc.id
+        user=User.objects.get(id=user_id)
+        user.first_name=request.POST.get('first_name')
+        user.last_name=request.POST.get('last_name')
+        user.username=request.POST.get('username')
+        user.email=request.POST.get('email')
+       
+        customer.age=request.POST.get('age')
+        customer.number=request.POST.get('number')
+        customer.address=request.POST.get('address')
+        old=customer.image
+        new=request.FILES.get('files')
+        if old != None and new==None:
+            customer.image=old
+        else:
+            customer.image=new 
+          
+     
+
+        customer.save()
+        user.save()
+        messages.success(request,'Profile Updated')
+        
+        
+        return redirect('userprofile')
+@login_required(login_url='login1')
+def deleteu(request,pk):
+    emp=Details.objects.get(id=pk)
+    emp.delete()
+    return redirect('adminprofile')    
