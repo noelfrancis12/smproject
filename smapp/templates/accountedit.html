@@ -91,27 +91,55 @@
      cursor: pointer;
      transition: .2s;
    }
-/* #inp {
-	border: none;
-	border-bottom: 2px solid #D1D1D4;
-	background: none;
-	padding: 10px;
-	padding-left: 24px;
-	font-weight: 700;
-	font-style: italic;
-    font-weight: bold;
-	transition: .2s;
-    color: #040404;
-    width: 100%;
-}
-#gold{
-  border-radius: 26px;
-  
-} */
-   
+   body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      margin-top: 50px;
+    }
+    .card {
+      border: none;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+      background-color: #007bff;
+      color: white;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 25px;
+    }
+    #button {
+      width: 100%;
+    }
+    .profile-image-container {
+      position: relative;
+      text-align: center;
+    }
+    .profile-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .profile-image-input {
+      display: none;
+    }
+    .edit-profile-label {
+      display: inline-block;
+      background-color: #28a745;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .edit-profile-label:hover {
+      background-color: #218838;
+    }
      </style>
      </head>
-     <body style="overflow-y: scroll;background-image: url(https://cdn.pixabay.com/photo/2016/06/24/15/48/pattern-1477380_640.png) ;background-repeat: no-repeat;background-size: cover ;">
+     <body style="overflow-y: scroll;background-image: url(https://cdn.pixabay.com/photo/2020/10/14/16/14/space-5654794_640.png) ;">
        
        {% for message in messages %}
      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -123,12 +151,7 @@
        swal("Success!",m, "success")
      </script>
    
-     <!-- modal show -->
-     <!-- <script>
-         $(document).ready(function() {
-             $("#loginmodal").modal('show');
-         });
-     </script> -->
+    
      
    
      {% elif message.tags == 'error' %}
@@ -157,66 +180,75 @@
 <div class="main-content">
 <center> 
   
-    <div class="container">
-        <div class="row">
-          <div class="col-2">
-    
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="font-weight-bold">Edit Profile</h3>
           </div>
-          
-          
-          <div class="col-8">
-            <h3 class="text-center" >Edit Profile</h3><br>
-    
-    
-            <form method="post" action="{% url 'editdetails' usrkey.id %}" enctype="multipart/form-data"   >
+          <div class="card-body">
+            <form method="post" action="{% url 'editdetails' usrkey.id %}" enctype="multipart/form-data">
               {% csrf_token %}
-             
-              {% if usrkey.image %}
-               <img id="a1" src="{{usrkey.image.url}}" style="width: 150px;" class="rounded-circle" alt=""><br>
-               <input type="file" name="files" accept="image/*" value="{{old}}" style="background-color: orange;" id="gold"  ><br><br>
-               {% else %}
-               
-          <input type="file" name="image" class="form-control" accept="image/*"><br>
-          {% endif %}
-              <input type="text" name="first_name" class="form-control"value="{{usrkey.userc.first_name}}" placeholder="First Name" id="inp"><br>
-              <input type="text" name="last_name"class="form-control" value="{{usrkey.userc.last_name}}" placeholder="Last Name" id="inp" ><br>
-              <input type="text" name="username" class="form-control" value="{{usrkey.userc.username}}" placeholder="Username" id="inp"><br>
-              <input type="email" name="email" class="form-control" value="{{usrkey.userc.email}}" placeholder="Email" id="inp"><br>
-              
-              <input type="text" name="age" class="form-control" value="{{usrkey.age}}" placeholder="Age" id="inp"><br>
-              
-              <input type="text" name="number" class="form-control" value="{{usrkey.number}}" placeholder="Mobile Number" id="inp"><br>
-              <input type="text" name="address" class="form-control" value="{{usrkey.address}}" placeholder="Address" id="inp"><br>
-             
-    
-            
-    
-    
-              <button type="submit" class="btn mb-3 btn-warning" id="button">Submit</button>
+              <div class="form-group profile-image-container">
+                <label for="profile-image" class="edit-profile-label">
+                  {% if usrkey.image %}
+                    <img src="{{ usrkey.image.url }}" alt="Profile Picture" class="profile-image mb-3">
+                  {% else %}
+                    <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-image mb-3">
+                  {% endif %}
+                  Change Profile Picture
+                </label>
+                <input type="file" name="files" id="profile-image" class="profile-image-input">
+              </div>
+              <div class="form-group">
+                <input type="text" name="first_name" class="form-control" value="{{usrkey.userc.first_name}}" placeholder="First Name">
+              </div>
+              <div class="form-group">
+                <input type="text" name="last_name" class="form-control" value="{{usrkey.userc.last_name}}" placeholder="Last Name">
+              </div>
+              <div class="form-group">
+                <input type="text" name="username" class="form-control" value="{{usrkey.userc.username}}" placeholder="Username">
+              </div>
+              <div class="form-group">
+                <input type="email" name="email" class="form-control" value="{{usrkey.userc.email}}" placeholder="Email">
+              </div>
+              <div class="form-group">
+                <input type="text" name="age" class="form-control" value="{{usrkey.age}}" placeholder="Age">
+              </div>
+              <div class="form-group">
+                <input type="text" name="number" class="form-control" value="{{usrkey.number}}" placeholder="Mobile Number">
+              </div>
+              <div class="form-group">
+                <input type="text" name="address" class="form-control" value="{{usrkey.address}}" placeholder="Address">
+              </div>
+              <button type="submit" class="btn btn-warning" id="button">Submit</button>
             </form>
-    
-    
-    
-    
-      
-    
-    
-          </div>
-          <div class="col-2">
-    
           </div>
         </div>
       </div>
-    
-    
-    
-    
-
-   
+    </div>
+  </div>
     </center>
           
 
 
   </div>
+  <script>
+    const profileImageInput = document.getElementById('profile-image');
+    const profileImage = document.querySelector('.profile-image');
+  
+    profileImageInput.addEventListener('change', function() {
+      if (this.files && this.files[0]) {
+        const reader = new FileReader();
+  
+        reader.onload = function (e) {
+          profileImage.src = e.target.result;
+        };
+  
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+  </script>
 </body>
 </html>

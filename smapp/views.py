@@ -13,7 +13,7 @@ def login1(request):
     username=request.POST['username']
     password=request.POST['password']
     user = auth.authenticate(username=username, password=password) 
-    #request.session["uid"]=user.id#session method part
+    
     if user is not None:
         if user.is_staff:
             login(request,user)
@@ -32,8 +32,7 @@ def login1(request):
      return redirect('home')
 @login_required(login_url='login1')
 def logout(request):
-    #if request.user.is_authenticated:(is authenticated method part)
-    #request.session["uid"] = ""#session method part
+    
     auth.logout(request)
     return redirect('home')
 @login_required(login_url='login1')   
@@ -80,8 +79,7 @@ def signupdb(request):
         return render(request,'signup.html')
 @login_required(login_url='login1')
 def userprofile(request):
-    # if not request.user.is_staff:
-    #     return redirect('/')
+   
     ucuser=request.user.id
     use=Details.objects.get(userc_id=ucuser)
    
